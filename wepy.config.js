@@ -1,9 +1,15 @@
-var prod = process.env.NODE_ENV === 'production'
+const path = require('path')
+const prod = process.env.NODE_ENV === 'production'
 
 module.exports = {
   wpyExt: '.wpy',
   eslint: true,
   cliLogs: true,
+  resolve: {
+    alias: {
+      '@': path.join(__dirname, 'src')
+    }
+  },
   compilers: {
     sass: {
       outputStyle: 'compressed'
@@ -14,7 +20,8 @@ module.exports = {
       plugins: [
         'babel-plugin-transform-class-properties',
         'transform-export-extensions',
-        'syntax-export-extensions'
+        'syntax-export-extensions',
+        'transform-object-rest-spread'
       ]
     }
   },
