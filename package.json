@@ -4,8 +4,8 @@
   "description": "A WePY project",
   "main": "dist/app.js",
   "scripts": {
-    "dev:tools": "nodemon -w tools tools/init.js",
-    "build:template": "node tools/init",
+    "dev:tools": "nodemon -w tools tools/build-template.js",
+    "build:template": "node tools/build-template",
     "dev": "wepy build --watch",
     "build": "cross-env NODE_ENV=production wepy build --no-cache",
     "precommit": "lint-staged"
