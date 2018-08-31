@@ -25,7 +25,8 @@ const templateFile = [
   '.wepyignore',
   'project.config.json',
   'wepy.config.js',
-  'yarn.lock'
+  'yarn.lock',
+  'qshell.config.json'
 ]
 
 if (existsSync(templatePath)) {

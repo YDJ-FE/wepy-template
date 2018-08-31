@@ -8,6 +8,8 @@
 
 <script>
   import wepy from 'wepy'
+  import 'wepy-async-function'
+  import '@/utils/api'
 
   export default class Index extends wepy.page {
     config = {
