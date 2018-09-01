@@ -3,15 +3,15 @@ export const env = '__env__'
 const config = {
   dev: {
     env,
-    url: 'https://test-wxa.yidejia.com/index.php/'
+    url: ''
   },
   sit: {
     env,
-    url: 'https://test-wxa.yidejia.com/index.php/'
+    url: ''
   },
   prod: {
     env,
-    url: 'https://wxa.yidejia.com/'
+    url: ''
   }
 }
 

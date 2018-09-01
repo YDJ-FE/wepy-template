@@ -31,7 +31,7 @@ export const userLogin = async () => {
     code: wxLoginRes.code,
     rd_session_key: wepy.getStorageSync('session'),
     cps_id: urlShareCpsId,
-    key: 'fw_wxaSingle_user'
+    key: ''
   })
   wepy.setStorageSync('token', res.token)
   wepy.setStorageSync('session', res.rd_session_key)

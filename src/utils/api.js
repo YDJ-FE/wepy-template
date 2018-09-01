@@ -3,6 +3,6 @@ import config from '@/utils/config'
 
 const httpInstance = new Http(config.url)
 
-const { get, post } = httpInstance.http
+const { get } = httpInstance.http
 
-export const login = (data = {}) => get('api/user/wxaSingle/login', data)
+export const login = (data = {}) => get('', data)

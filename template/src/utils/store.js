@@ -6,7 +6,7 @@ import { getUserInfo, getGroupList, bindGroup } from '@/utils/api'
 
 export const state = {
   userInfo: {},
-  appId: 'wxc5c17abdfa5b7aff',
+  appId: '',
   urlShareCpsId: ''
 }
 
