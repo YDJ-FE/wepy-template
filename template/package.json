@@ -1,7 +1,7 @@
 {
-  "name": "demo-wepy",
+  "name": "{{ name }}",
   "version": "0.0.1",
-  "description": "A WePY project",
+  "description": "{{ description }}",
   "main": "dist/app.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev wepy build --watch",
@@ -10,7 +10,7 @@
     "precommit": "lint-staged",
     "qn:upload": "(qshell qupload qshell.config.json) || echo \"请先下载qshell命令行工具\""
   },
-  "author": "王世隆 <547463736@qq.com>",
+  "author": "{{ author }}",
   "license": "MIT",
   "dependencies": {
     "lodash.isempty": "^4.4.0",

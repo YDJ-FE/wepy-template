@@ -41,7 +41,9 @@ templateFile.forEach(file => {
 })
 
 const pkg = JSON.parse(readFileSync(pkgPath))
-
+pkg.name = '{{ name }}'
+pkg.description = '{{ description }}'
+pkg.author = '{{ author }}'
 DelField(pkg, 'scripts', 'dev:tools')
 DelField(pkg, 'scripts', 'build:template')
 DelField(pkg, 'devDependencies', 'colors')
