@@ -7,7 +7,7 @@
     "minified": false
   },
   "compileType": "miniprogram",
-  "appid": "touristappid",
+  "appid": "wxc5c17abdfa5b7aff",
   "projectname": "demo-wepy",
   "miniprogramRoot": "./dist"
 }

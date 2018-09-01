@@ -1,0 +1,9 @@
+{
+  "src_dir": "",
+  "bucket": "",
+  "key_prefix": "",
+  "log_stdout": true,
+  "rescan_local": true,
+  "overwrite": false,
+  "skip_suffixes": ".DS_Store,.exe"
+}

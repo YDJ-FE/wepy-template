@@ -1,10 +1,14 @@
-<style lang="scss">
-</style>
-
 <script>
 import wepy from 'wepy'
+import 'wepy-async-function'
 
 export default class extends wepy.app {
+  constructor() {
+    super()
+    this.use('requestfix')
+    this.use('promisify')
+  }
+
   config = {
     pages: [
       'pages/index'
@@ -22,3 +26,6 @@ export default class extends wepy.app {
   }
 }
 </script>
+
+<style lang="scss">
+</style>

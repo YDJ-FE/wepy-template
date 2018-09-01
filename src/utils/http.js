@@ -1,16 +1,22 @@
 import wepy from 'wepy'
 import qs from 'qs'
-import { state, mutation } from '@/utils/store'
-import { debounce, logMessage, reLogin } from '@/utils'
+import { state } from '@/utils/store'
+import { logMessage, debounce, reLogin, userLogin } from '@/utils/helper'
 
 const $logMessage = debounce(logMessage, 300)
 const $reLogin = debounce(reLogin, 300)
 
 const methods = ['get', 'post']
 
+const hideLoading = () => {
+  wepy.hideLoading()
+  wepy.hideNavigationBarLoading()
+}
+
 export default class Http {
   http = {}
   baseUrl = ''
+  apiUnauthorizedCache = {}
 
   constructor(baseUrl) {
     this.baseUrl = baseUrl
@@ -19,48 +25,65 @@ export default class Http {
 
   init() {
     methods.forEach(method => {
-      this.http[method] = async (
-        apiName,
-        data,
-        apiOpts = {
+      this.http[method] = async (apiName, data, apiOpts) => {
+        const opts = {
           showNavigationBarLoading: true,
           showMaskLoading: false,
           shouldAddToken: true,
           shouldShowUniyErrorTips: true,
-          shouldAddUserId: true
+          shouldAddUserId: true,
+          ...apiOpts
         }
-      ) => {
+
+        if (opts.showNavigationBarLoading) wepy.showNavigationBarLoading()
+        if (opts.showMaskLoading) {
+          wepy.showLoading({
+            mask: true
+          })
+        }
         try {
-          if (apiOpts.showNavigationBarLoading) wepy.showNavigationBarLoading()
-          if (apiOpts.showMaskLoading) {
-            wepy.showLoading({
-              mask: true
-            })
-          }
+          // 微信 收到开发者服务成功返回就会执行success（而不会理论http status状态），
           const res = await wepy.request({
             method: method.toUpperCase(),
             url: `${this.baseUrl}${apiName}`,
             data:
               method === 'post'
-                ? qs.stringify(this.makeQueryParams(data, apiOpts))
-                : this.makeQueryParams(data, apiOpts),
+                ? qs.stringify(this.makeQueryParams(data, opts))
+                : this.makeQueryParams(data, opts),
             header: {
               'content-type': 'application/x-www-form-urlencoded'
             }
           })
-          // console.log('res', res)
-          wepy.hideLoading()
-          wepy.hideNavigationBarLoading()
-          return this.getDifferentResult(res, apiOpts, apiName)
+          hideLoading()
+          const apiResponse = res.data
+          const httpStatus = res.statusCode
+          if (httpStatus === 200) {
+            if (apiResponse.code === 1 || apiResponse.code === 200) {
+              return Promise.resolve(apiResponse)
+            }
+          }
+          if (httpStatus === 401) {
+            // TODO 这里需要做重新登录再请求
+            if (this.apiUnauthorizedCache[apiName] > 10) {
+              $logMessage('请求超过10')
+              return Promise.reject(apiResponse)
+            }
+            wepy.clearStorageSync()
+            await userLogin()
+            this.apiUnauthorizedCache[apiName] =
+              Number(this.apiUnauthorizedCache[apiName]) + 1
+            await this.http[method](apiName, data, apiOpts)
+            delete this.apiUnauthorizedCache[apiName]
+          }
+          if (opts.shouldShowUniyErrorTips) {
+            $logMessage(apiResponse.message)
+          }
+          return Promise.reject(apiResponse)
         } catch (error) {
-          wepy.hideLoading()
-          wepy.hideNavigationBarLoading()
-          console.log('error', error)
+          $logMessage('网络开小差哦，请稍后再做尝试')
+          hideLoading()
         }
       }
-    })
-    Object.keys(this.http).forEach(v => {
-      this[v] = this.http[v]
     })
   }
   makeQueryParams(data = {}, apiOpts) {
@@ -78,37 +101,5 @@ export default class Http {
       tmp.token = token || wepy.getStorageSync('token')
     }
     return tmp
-  }
-
-  getDifferentResult(res, apiOpts, apiName) {
-    const apiResponse = res.data
-    switch (res.statusCode) {
-      case 200:
-        mutation.updateRequestInfo(apiName, 'clear')
-        if (apiResponse.code === 1 || apiResponse.code === 200) {
-          return Promise.resolve(apiResponse.data)
-        } else {
-          if (apiOpts.shouldShowUniyErrorTips) {
-            $logMessage(apiResponse.message)
-          }
-          return Promise.reject(apiResponse)
-        }
-      case 401:
-        mutation.updateRequestInfo(apiName)
-        if (state.requestInfo.count < 10) {
-          $reLogin()
-        }
-        return Promise.reject(apiResponse)
-      case 403:
-        mutation.updateRequestInfo(apiName)
-        if (state.requestInfo.count < 10) {
-          $reLogin()
-        }
-        return Promise.reject(apiResponse)
-      default: {
-        $logMessage(apiResponse.message)
-        return Promise.reject(apiResponse)
-      }
-    }
   }
 }

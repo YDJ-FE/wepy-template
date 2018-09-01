@@ -15,7 +15,8 @@
   "author": "王世隆 <547463736@qq.com>",
   "license": "MIT",
   "dependencies": {
-    "wepy": "^1.7.0"
+    "lodash.isempty": "^4.4.0",
+    "wepy": "1.7.1"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [

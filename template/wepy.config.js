@@ -1,5 +1,5 @@
 const path = require('path')
-const prod = process.env.NODE_ENV === 'production'
+const isDev = process.env.NODE_ENV === 'dev'
 
 module.exports = {
   wpyExt: '.wpy',
@@ -25,13 +25,21 @@ module.exports = {
       ]
     }
   },
-  plugins: {},
+  plugins: {
+    replace: {
+      filter: /config\.js$/,
+      config: {
+        find: '__env__',
+        replace: process.env.NODE_ENV
+      }
+    }
+  },
   appConfig: {
     noPromiseAPI: ['createSelectorQuery']
   }
 }
 
-if (prod) {
+if (!isDev) {
   module.exports.cliLogs = false
 
   delete module.exports.compilers.babel.sourcesMap
@@ -40,6 +48,13 @@ if (prod) {
 
   // 压缩js
   module.exports.plugins = {
+    replace: {
+      filter: /config\.js$/,
+      config: {
+        find: '__env__',
+        replace: process.env.NODE_ENV
+      }
+    },
     uglifyjs: {
       filter: /\.js$/,
       config: {}
