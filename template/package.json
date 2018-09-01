@@ -14,10 +14,11 @@
   "license": "MIT",
   "dependencies": {
     "lodash.isempty": "^4.4.0",
+    "qs": "^6.5.2",
     "wepy": "1.7.1"
   },
   "lint-staged": {
-    "{src,test}/**/*.ts": [
+    "*": [
       "prettier --write",
       "git add"
     ]

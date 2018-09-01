@@ -8,14 +8,14 @@
 
 <script>
   import wepy from 'wepy'
-  import { initGlobalData } from '@/utils'
+  // import { initGlobalData } from '@/utils/auth'
 
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: 'test'
     }
     async onLoad() {
-      await initGlobalData()
+      // await initGlobalData()
       console.log('onLoad')
     }
   }

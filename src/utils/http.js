@@ -1,7 +1,8 @@
 import wepy from 'wepy'
 import qs from 'qs'
 import { state } from '@/utils/store'
-import { logMessage, debounce, userLogin } from '@/utils/helper'
+import { logMessage, debounce } from '@/utils/helper'
+import { userLogin } from '@/utils/auth'
 
 const $logMessage = debounce(logMessage, 300)
 // const $reLogin = debounce(reLogin, 300)

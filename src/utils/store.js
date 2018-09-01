@@ -1,8 +1,5 @@
-// 之后考虑把全局变量接入此模块
-/* eslint-disable */
-
-import wepy from 'wepy'
-import { getUserInfo, getGroupList, bindGroup } from '@/utils/api'
+// import wepy from 'wepy'
+// import { getUserInfo, getGroupList, bindGroup } from '@/utils/api'
 
 export const state = {
   userInfo: {},
